@@ -125,6 +125,40 @@ function HousingLocation({ housingLocation }: Props) {}
 
 ---
 
+## @for と track
+
+Angular の繰り返し構文。React の `.map()` + `key` に相当。
+
+```html
+@for (housingLocation of housingLocationList; track housingLocation.id) {
+  <app-housing-location [housingLocation]="housingLocation" />
+}
+```
+
+React との比較：
+
+```tsx
+// React
+housingLocationList.map((item) => (
+  <HousingLocation key={item.id} housingLocation={item} />
+))
+```
+
+### track（= React の key）
+
+リストが更新されたとき、どの要素が変わったかを Angular が特定するためのキー。React の `key` と全く同じ概念。
+
+| 指定方法 | 使いどき |
+|---|---|
+| `track item.id` | ID がある場合（推奨） |
+| `track $index` | ID がない場合の代替 |
+
+`track $index` は並び替えに弱い。並び替えが起きると Angular がインデックスで判断するため、実際は移動しただけの要素も再レンダリングされる。`id` がある場合は必ず `track item.id` を使う。
+
+**`track` は省略不可**（省略するとエラー）。
+
+---
+
 ## Signal と input()
 
 Signal は **Angular v16 で導入された新しいリアクティビティの仕組み**。`input()` もそれに基づいており、値を読み出すときに `()` が必要。
