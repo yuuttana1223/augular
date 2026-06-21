@@ -13,7 +13,7 @@ import type { HousingLocationInfo } from "src/app/housinglocation";
       </form>
     </section>
     <section class="results">
-      <app-housing-location />
+      <app-housing-location [housingLocation]="housingLocation" />
     </section>
   `,
   styleUrls: ["./home.css"],

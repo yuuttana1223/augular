@@ -85,3 +85,40 @@ export class AppModule {}
 
 **Angular** の略。Angular CLI のコマンド名として使われている。  
 前身の AngularJS（Angular 1）時代から引き継がれている。
+
+---
+
+## バインディング（Binding）
+
+データをテンプレート（HTML）とコンポーネント（TypeScript）の間でつなぐ仕組み。React の props 渡しと同じ概念。
+
+| 書き方 | 種類 | 方向 |
+|---|---|---|
+| `[prop]="value"` | プロパティバインディング | 親 → 子 |
+| `(event)="handler()"` | イベントバインディング | 子 → 親 |
+| `[(ngModel)]="value"` | 双方向バインディング | 両方向 |
+
+```html
+<!-- Angular -->
+<app-housing-location [housingLocation]="housingLocation" />
+```
+
+```tsx
+// React の props 渡しと同じ（[] が React の {} に相当）
+<HousingLocation housingLocation={housingLocation} />
+```
+
+受け取る側は `input()` で定義する：
+
+```typescript
+// Angular
+housingLocation = input.required<HousingLocationInfo>();
+
+// React
+function HousingLocation({ housingLocation }: Props) {}
+```
+
+### テンプレート内では `this` 不要
+
+- TypeScript コード（クラス内）→ `this.housingLocation`
+- テンプレート（HTML）→ `housingLocation`（Angular が自動でインスタンスをバインド）
