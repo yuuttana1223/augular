@@ -88,6 +88,46 @@ export class AppModule {}
 
 ---
 
+## import と imports の違い
+
+| | `import` | `imports` |
+|---|---|---|
+| 種類 | TypeScript の構文 | Angular の設定 |
+| 役割 | ファイルにクラスを読み込む | テンプレートで使えるようにする |
+
+`import` で読み込んだだけではテンプレートで使えない。`imports` に追加して初めて動く。
+
+```typescript
+import { RouterOutlet } from "@angular/router";  // 読み込むだけ
+
+@Component({
+  imports: [RouterOutlet],  // これで <router-outlet /> がテンプレートで使える
+})
+```
+
+---
+
+## ルーティング
+
+`src/app/routes.ts` でパスとコンポーネントを対応付ける。
+
+```typescript
+const routeConfig: Routes = [
+  { path: "",           component: Home },    // localhost:4200/
+  { path: "details/:id", component: Details }, // localhost:4200/details/1
+];
+```
+
+テンプレートでのリンクは `[routerLink]` を使う（`<a href>` と違いページ全体をリロードしない）：
+
+```html
+<a [routerLink]="['/']">トップへ</a>
+```
+
+画面の表示場所は `<router-outlet />` で指定する。
+
+---
+
 ## バインディング（Binding）
 
 データをテンプレート（HTML）とコンポーネント（TypeScript）の間でつなぐ仕組み。React の props 渡しと同じ概念。
