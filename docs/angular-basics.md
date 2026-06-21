@@ -122,3 +122,31 @@ function HousingLocation({ housingLocation }: Props) {}
 
 - TypeScript コード（クラス内）→ `this.housingLocation`
 - テンプレート（HTML）→ `housingLocation`（Angular が自動でインスタンスをバインド）
+
+---
+
+## Signal と input()
+
+Signal は **Angular v16 で導入された新しいリアクティビティの仕組み**。`input()` もそれに基づいており、値を読み出すときに `()` が必要。
+
+```typescript
+// 古い書き方（@Input デコレータ、v15以前）
+@Input() housingLocation!: HousingLocationInfo;
+// テンプレートで → {{ housingLocation.name }}
+
+// 新しい書き方（Signal ベース、v16以降）
+housingLocation = input.required<HousingLocationInfo>();
+// テンプレートで → {{ housingLocation().name }}
+```
+
+React の `useState` との比較：
+
+```typescript
+// React → () 不要
+const [housingLocation] = useState(...);
+housingLocation.name;
+
+// Angular Signal → () 必要
+housingLocation = input.required<HousingLocationInfo>();
+housingLocation().name;
+```
