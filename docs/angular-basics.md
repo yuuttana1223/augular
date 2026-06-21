@@ -157,6 +157,30 @@ housingLocationList.map((item) => (
 
 **`track` は省略不可**（省略するとエラー）。
 
+### @for の組み込み変数
+
+`$index` は Angular が自動で用意する組み込み変数。名前は固定で、自分で定義するものではない。
+
+| 変数 | 意味 |
+|---|---|
+| `$index` | 何番目か（0始まり） |
+| `$first` | 最初の要素か（boolean） |
+| `$last` | 最後の要素か（boolean） |
+| `$even` | 偶数番目か（boolean） |
+| `$odd` | 奇数番目か（boolean） |
+| `$count` | 全件数 |
+
+プロパティバインディングで子コンポーネントに渡す場合も通常の変数と同じ：
+
+```html
+@for (housingLocation of housingLocationList; track housingLocation.id) {
+  <app-housing-location
+    [housingLocation]="housingLocation"
+    [index]="$index"
+  />
+}
+```
+
 ---
 
 ## Signal と input()
