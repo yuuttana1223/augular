@@ -149,6 +149,24 @@ export class Home {
 
 コンストラクタでの初期化だけなら、プロパティの直接代入でシンプルに書ける。
 
+### providedIn: 'root'
+
+`@Injectable({ providedIn: 'root' })` でアプリ全体のシングルトンとして登録。どのコンポーネントから `inject()` しても同じインスタンスが返る。
+
+**使う場面：** API 通信・認証・グローバルなデータ管理など  
+**基本的にサービスは `providedIn: 'root'` でほぼ問題ない。**
+
+### サービスは責務ごとに複数作る
+
+1サービス1責務が基本。React のカスタムフックを分けるのと同じ考え方。
+
+```
+src/app/
+├── housing.ts     # 物件データ
+├── auth.ts        # 認証
+└── user.ts        # ユーザー情報
+```
+
 ### Angular v19 以降のファイル命名
 
 v18 以前は `housing.service.ts` / `HousingService` だったが、v19 以降は `housing.ts` / `Housing` で生成される。チュートリアルが古い場合は読み替える。
