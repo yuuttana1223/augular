@@ -125,6 +125,36 @@ function HousingLocation({ housingLocation }: Props) {}
 
 ---
 
+## サービスと inject()
+
+サービスはビジネスロジックを持つクラス。`@Injectable` デコレータを付けて定義する。
+
+```typescript
+@Injectable({
+  providedIn: 'root',  // アプリ全体でシングルトン
+})
+export class Housing {
+  getAllHousingLocations() { ... }
+}
+```
+
+コンポーネントへの注入は `inject()` 関数を使う（公式スタイルガイドで推奨）：
+
+```typescript
+export class Home {
+  housingService = inject(Housing);
+  housingLocationList = this.housingService.getAllHousingLocations();
+}
+```
+
+コンストラクタでの初期化だけなら、プロパティの直接代入でシンプルに書ける。
+
+### Angular v19 以降のファイル命名
+
+v18 以前は `housing.service.ts` / `HousingService` だったが、v19 以降は `housing.ts` / `Housing` で生成される。チュートリアルが古い場合は読み替える。
+
+---
+
 ## @for と track
 
 Angular の繰り返し構文。React の `.map()` + `key` に相当。
