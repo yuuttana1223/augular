@@ -174,6 +174,41 @@ export class Details {
 
 ---
 
+## テンプレート参照変数（#変数名）
+
+`#` で DOM 要素に名前をつけてテンプレート内から参照できる。クラス（TypeScript）からは参照できず、テンプレート内だけで使える。
+
+```html
+<input type="text" #filter />
+<button (click)="filterResults(filter.value)">Search</button>
+```
+
+React の `useRef` に相当するが、テンプレート内で完結するので ref を渡す必要がない。
+
+```tsx
+// React
+const filterRef = useRef<HTMLInputElement>(null);
+<button onClick={() => filterResults(filterRef.current?.value)}>
+
+// Angular → テンプレート内で直接参照
+<input #filter />
+<button (click)="filterResults(filter.value)">
+```
+
+---
+
+## イベントバインディング（(click) など）
+
+`(イベント名)="メソッド()"` でイベントを購読する。
+
+```html
+<button (click)="filterResults(filter.value)">Search</button>
+```
+
+React の `onClick={...}` に相当。
+
+---
+
 ## Reactive Forms（フォーム）
 
 `FormGroup` と `FormControl` でフォームを定義する。
