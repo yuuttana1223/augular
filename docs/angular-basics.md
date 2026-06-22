@@ -258,6 +258,19 @@ export class Home {
 
 コンストラクタでの初期化だけなら、プロパティの直接代入でシンプルに書ける。
 
+### @Service（v22以降）
+
+`@Injectable({ providedIn: 'root' })` の短縮形として v22 で追加。
+
+```typescript
+import { Service } from '@angular/core';
+
+@Service()
+export class AnalyticsLogger { ... }
+```
+
+v21 以前では使えないので `@Injectable` を使う。
+
 ### providedIn: 'root'
 
 `@Injectable({ providedIn: 'root' })` でアプリ全体のシングルトンとして登録。どのコンポーネントから `inject()` しても同じインスタンスが返る。
