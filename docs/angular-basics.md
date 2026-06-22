@@ -174,6 +174,46 @@ export class Details {
 
 ---
 
+## HttpClient
+
+Angular の HTTP クライアント。`fetch` の代わりに使う。実務ではこちらが一般的。
+
+```typescript
+http = inject(HttpClient);
+
+getAllHousingLocations() {
+  return this.http.get<HousingLocationInfo[]>(this.url); // Observable を返す
+}
+```
+
+`fetch` との違い：インターセプター（認証トークンの自動付与など）が使える、RxJS でエラーハンドリングを統一できる、テストがしやすい。
+
+---
+
+## ChangeDetectorRef と変更検知
+
+Angular は通常データが変わると自動で画面を更新するが、`Promise` で非同期取得した場合は検知できないことがある。その場合 `markForCheck()` で手動通知が必要。
+
+```typescript
+changeDetectorRef = inject(ChangeDetectorRef);
+
+.then((data) => {
+  this.list = data;
+  this.changeDetectorRef.markForCheck(); // 「画面を更新して」と伝える
+});
+```
+
+### markForCheck() を使わずに済む方法
+
+| 方法 | 説明 |
+|---|---|
+| Signal の `set()` | 変更を自動追跡するので不要 |
+| `async` パイプ | Observable を自動購読・変更検知 |
+
+Signal を使うのが現在の推奨。`markForCheck()` を書く機会は減っている。
+
+---
+
 ## テンプレート参照変数（#変数名）
 
 `#` で DOM 要素に名前をつけてテンプレート内から参照できる。クラス（TypeScript）からは参照できず、テンプレート内だけで使える。

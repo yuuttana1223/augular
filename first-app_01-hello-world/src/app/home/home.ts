@@ -28,13 +28,19 @@ import type { HousingLocationInfo } from "src/app/housinglocation";
   styleUrls: ["./home.css"],
 })
 export class Home {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   housingLocationList: HousingLocationInfo[] = [];
   housingService = inject(Housing);
   filteredLocationList: HousingLocationInfo[] = [];
 
   constructor() {
-    this.housingLocationList = this.housingService.getAllHousingLocations();
-    this.filteredLocationList = this.housingLocationList;
+    this.housingService
+      .getAllHousingLocations()
+      .then((housingLocationList: HousingLocationInfo[]) => {
+        this.housingLocationList = housingLocationList;
+        this.filteredLocationList = housingLocationList;
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   filterResults(text: string) {
