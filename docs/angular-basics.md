@@ -174,6 +174,53 @@ export class Details {
 
 ---
 
+## Reactive Forms（フォーム）
+
+`FormGroup` と `FormControl` でフォームを定義する。
+
+```typescript
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+applyForm = new FormGroup({
+  firstName: new FormControl("", [Validators.required]),
+  email: new FormControl("", [Validators.required, Validators.email]),
+});
+```
+
+### 値の取得
+
+フォームの値は一つずつ取り出す方が型安全。`?? ""` でデフォルト値を当てると `string` として扱える。
+
+```typescript
+// 一つずつ取り出す（推奨）
+this.applyForm.value.firstName ?? ""
+
+// スプレッドでまとめて渡すと型が string | null になる → サービス側の型が複雑になる
+```
+
+### バリデーション
+
+```typescript
+submitApplication() {
+  if (this.applyForm.invalid) return;  // 無効なら弾く
+  ...
+}
+```
+
+テンプレートでエラー表示：
+
+```html
+@if (applyForm.controls.email.hasError('required') && applyForm.controls.email.touched) {
+  <p>メールアドレスは必須です</p>
+}
+```
+
+### スキーマバリデーション（Zod など）
+
+Angular 組み込みには Zod のようなスキーマバリデーションはない。カスタムバリデータとして組み合わせることは可能だが、一般的ではない。まずは組み込み `Validators` を使う。
+
+---
+
 ## @if による条件分岐
 
 React の三項演算子に相当。
