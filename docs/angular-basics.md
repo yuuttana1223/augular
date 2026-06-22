@@ -121,10 +121,79 @@ const routeConfig: Routes = [
 テンプレートでのリンクは `[routerLink]` を使う（`<a href>` と違いページ全体をリロードしない）：
 
 ```html
-<a [routerLink]="['/']">トップへ</a>
+<!-- 固定パスは文字列でも書ける -->
+<a routerLink="/">トップへ</a>
+
+<!-- 動的な値がある場合は配列で渡す -->
+<a [routerLink]="['/details', housingLocation.id]">詳細へ</a>
+
+<!-- 複数セグメントも渡せる -->
+<a [routerLink]="['/users', userId, 'posts', postId]">
 ```
 
+配列の各要素がパスのセグメントになる。React Router のテンプレートリテラル（`` `/details/${id}` ``）に相当するが、Angular テンプレートではバッククォートが使えないため配列が慣習。
+
 画面の表示場所は `<router-outlet />` で指定する。
+
+### Angular テンプレートで使えない構文
+
+バッククォート・`new`・`typeof` などは使えない。シンプルな式のみ。
+
+```html
+<!-- NG -->
+<a [routerLink]="`/details/${id}`">
+
+<!-- OK -->
+<a [routerLink]="['/details', id]">
+```
+
+---
+
+## コンストラクタ vs プロパティ直接代入
+
+単純な代入だけならコンストラクタなしの方がシンプル。クラスフィールドは宣言順に初期化されるので、上で宣言したプロパティを下で参照できる。
+
+```typescript
+// コンストラクタあり（冗長）
+export class Details {
+  route = inject(ActivatedRoute);
+  housingLocationId = -1;
+  constructor() {
+    this.housingLocationId = Number(this.route.snapshot.params['id']);
+  }
+}
+
+// プロパティ直接代入（シンプル）
+export class Details {
+  route = inject(ActivatedRoute);
+  housingLocationId = Number(this.route.snapshot.params['id']);
+}
+```
+
+コンストラクタが必要な場面：複雑な条件分岐・複数処理をまとめたい場合。
+
+---
+
+## @if による条件分岐
+
+React の三項演算子に相当。
+
+```html
+@if (housingLocation) {
+  <p>{{ housingLocation.name }}</p>
+} @else {
+  <p>物件が見つかりません</p>
+}
+```
+
+### null チェックの使い分け
+
+| ケース | 書き方 |
+|---|---|
+| オブジェクト・配列の存在チェック | `@if (item)` で十分 |
+| 数値・文字列で `0` や `""` が有効な値 | `@if (item != null)` で統一 |
+
+`!= null` は `null` と `undefined` の両方を弾く。全部厳密比較（`!== undefined && !== null`）にすると冗長なので `!= null` が現実的なバランス。
 
 ---
 
