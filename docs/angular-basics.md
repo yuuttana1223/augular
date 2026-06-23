@@ -386,6 +386,47 @@ React の三項演算子に相当。
 
 ---
 
+## output() と emit（子 → 親へのデータ送信）
+
+子コンポーネントから親へデータを渡す仕組み。React のコールバック props に相当。
+
+```typescript
+// 子コンポーネント
+export class HousingLocation {
+  clicked = output<string>();  // output() で定義
+
+  onClick() {
+    this.clicked.emit('クリックされた値');  // emit で発火
+  }
+}
+```
+
+```html
+<!-- 親テンプレート → (イベント名) で購読 -->
+<app-housing-location (clicked)="handleClick($event)" />
+```
+
+```typescript
+// 親コンポーネント
+handleClick(value: string) {
+  console.log(value); // 'クリックされた値'
+}
+```
+
+`$event` が emit で渡した値。
+
+React との比較：
+
+```tsx
+// React → コールバック関数を props で渡す
+<HousingLocation onClick={(value) => handleClick(value)} />
+
+// Angular → output() + (イベント名) で購読
+<app-housing-location (clicked)="handleClick($event)" />
+```
+
+---
+
 ## バインディング（Binding）
 
 データをテンプレート（HTML）とコンポーネント（TypeScript）の間でつなぐ仕組み。React の props 渡しと同じ概念。
