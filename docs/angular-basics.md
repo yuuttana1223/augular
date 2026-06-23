@@ -195,6 +195,52 @@ export class Details {
 
 ---
 
+## Angular の得意・不得意
+
+**得意：**
+- 大規模な業務システム・管理画面
+- チーム開発（型安全・規約が厳格でブレにくい）
+- エンタープライズ向けアプリ（Google Ads など Google 自身が使用）
+
+**不得意：**
+- toC 向けサービス・コンテンツサイト（Next.js / Astro が向いている）
+- SEO 重視のサイト（SPA のため初期 HTML がほぼ空）
+
+「全部入り（ルーター・HttpClient・フォームが標準装備）」で大規模でも統一的に書けるのが強みだが、その分重厚で学習コストが高い。
+
+---
+
+## SSR / SSG
+
+Angular の SPA は初期 HTML がほぼ空なので SEO に弱い。対策：
+
+| 方法 | 内容 |
+|---|---|
+| Angular SSR（v17以降） | `ng add @angular/ssr` で公式対応。SEO 重視のアプリに |
+| Analog | Angular の Next.js 的フレームワーク。SSR・SSG・ファイルベースルーティング対応 |
+
+SSG が必要なら Analog が本命。ただし Angular でコンテンツサイトを作ること自体が少ない。
+
+---
+
+## カスタムタグが DOM に残る
+
+Angular コンポーネントは `selector` に指定した名前がそのまま DOM に出力される。
+
+```html
+<app-root>
+  <app-home>
+    <app-housing-location>...</app-housing-location>
+  </app-home>
+</app-root>
+```
+
+React は仮想 DOM でコンポーネントタグが DOM に残らないが、Angular はカスタム要素として残る。ブラウザは未知のタグを無視して中身を表示するので動作上は問題ない。DevTools でコンポーネントの階層がそのまま見えるのでデバッグしやすい。
+
+SEO への影響はタグ名ではなく SPA 全般の問題（JS 実行前はコンテンツが空）。
+
+---
+
 ## HttpClient
 
 Angular の HTTP クライアント。`fetch` の代わりに使う。実務ではこちらが一般的。
