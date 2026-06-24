@@ -425,6 +425,25 @@ React との比較：
 <app-housing-location (clicked)="handleClick($event)" />
 ```
 
+### output\<void\>() — 値を渡さない通知
+
+「何かが起きた」という通知だけでよいときは `void` を使う。親がすでに文脈を知っているとき。
+
+```typescript
+// 子: モーダルの閉じるボタン
+readonly closed = output<void>();
+onClose() { this.closed.emit(); } // 引数なし
+```
+
+```html
+<!-- 親: 何を閉じるかは自分が知っている -->
+<app-modal (closed)="isOpen = false" />
+```
+
+`void` が向く場面：モーダルの「閉じる」、削除確認ダイアログのOK、「もっと読む」ボタンなど。
+
+---
+
 ### React と Angular の設計思想の違い
 
 結果は同じだが責務の置き方が異なる。
@@ -619,4 +638,20 @@ housingLocation.name;
 // Angular Signal → () 必要
 housingLocation = input.required<HousingLocationInfo>();
 housingLocation().name;
+```
+
+### input() vs input.required()
+
+| | `input<T>(default?)` | `input.required<T>()` |
+|---|---|---|
+| デフォルト値 | 指定可 | なし |
+| 渡し忘れ | undefined になる | コンパイルエラー |
+
+### computed() との組み合わせ
+
+`input()` はシグナルなので `computed()` の中でそのまま読める。親の値が変わると自動で再計算される。
+
+```typescript
+readonly name  = input.required<string>();
+readonly greeting = computed(() => `こんにちは、${this.name()}さん！`);
 ```
